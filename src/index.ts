@@ -64,7 +64,7 @@ export class Instance {
   }
 }
 
-function SimplifyNumber (num: number, config?: OptionInstances) {
+export function SimplifyNumber (num: number, config?: OptionInstances) {
   const instance = new Instance(config)
 
   const simplifiedNumber = instance.simplify(num)

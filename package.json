@@ -1,23 +1,26 @@
 {
-  "name": "simplify-number",
-  "version": "1.0.0",
+  "name": "@notenoughupdates/simplify-number",
+  "version": "1.0.1",
   "description": "Simplify Number",
   "main": "./dist/index.js",
   "repository": "https://github.com/rohmanhm/simplify-number.git",
-  "typings": "./index.d.ts",
+  "typings": "./dist/index.d.ts",
   "author": "MH Rohman",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc",
-    "test": "tsc && ava"
+    "build": "yarn tsc",
+    "build:no-emit": "yarn tsc --noEmit",
+    "test": "tsc && ava",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn build:no-emit"
   },
   "devDependencies": {
-    "ava": "^1.0.0-beta.8",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.0.3"
+    "ava": "^3.15.0",
+    "ts-node": "^10.4.0",
+    "tslint": "^6.1.3",
+    "tslint-config-standard": "^9.0.0",
+    "typescript": "^4.5.2"
   },
   "ava": {
     "files": [
@@ -31,5 +34,13 @@
     "require": [
       "ts-node/register"
     ]
-  }
+  },
+  "files": [
+    "src/",
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "tsconfig.json",
+    "yarn.lock"
+  ]
 }
