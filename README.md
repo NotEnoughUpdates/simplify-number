@@ -1,40 +1,26 @@
 # Simplify Number
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/rohmanhm/simplify-number.svg)](https://greenkeeper.io/)
-[![Build Status](https://travis-ci.com/rohmanhm/simplify-number.svg?branch=master)](https://travis-ci.com/rohmanhm/simplify-number)
-
-> Simplify number
+Simplifies large numbers.
 
 ## How to install
 
-- via **npm**:
-
-```bash
-npm install --save simplify-number
-```
-
-- via **yarn**:
-
-```bash
-yarn add simplify-number
+```sh
+yarn add @tanzanite/simplify-number
 ```
 
 ## Usage
 
 ```typescript
-// ES6+ Babel
-// Typescript
-import SimplifyNumber from 'simplify-number'
-// CommonJS
-const SimplifyNumber = require('simplify-number').default
+// ESM only
+import simplifyNumber from "@tanzanite/simplify-number";
 
-console.log(SimplifyNumber(1000)) // it's return 1k
+console.log(simplifyNumber(1000)); // 1k
 ```
 
 ## API
 
-```typescript
-SimplifyNumber(number, config)
+```ts
+simplifyNumber(number, config);
 ```
 
 - `number`: type `number`. example: `1000`
@@ -42,7 +28,7 @@ SimplifyNumber(number, config)
   - `abbrev`: type `array`. default: `['k', 'm', 'b', 't']`
   - `decimal`: type `number`. default: `2`
 
-## LINCESE
+## License
 
 [MIT](http://opensource.org/licenses/MIT)
 Copyright (c) 2018 - MH Rohman Masyhar

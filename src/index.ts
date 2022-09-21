@@ -1,75 +1,87 @@
-export type Optional<T> = { [P in keyof T]?: T[P] }
-
 export interface ConfigInstance {
-  abbrev: string[]
-  decimal: number
+	/**
+	 * An array of abbreviation where the index + 1 (x) represents 10^(3*x).
+	 * @default
+	 * ["k", "m", "b", "t"]
+	 */
+	abbreviations: string[];
+
+	/**
+	 * The number of decimal places to use.
+	 * @default 2
+	 */
+	decimal: number;
 }
 
-export type OptionInstances = Optional<ConfigInstance>
+export type OptionInstances = Partial<ConfigInstance>;
 
 export class Instance {
-  public config: ConfigInstance = {
-    abbrev: ['k', 'm', 'b', 't'],
-    decimal: 2
-  }
+	public config: ConfigInstance = {
+		abbreviations: ["k", "m", "b", "t"],
+		decimal: 2
+	};
 
-  constructor (options?: OptionInstances) {
-    if (options) {
-      // Merge options
-      this.config = {
-        ...this.config,
-        ...options
-      }
-    }
-  }
+	constructor(options?: OptionInstances) {
+		if (options) {
+			// Merge options
+			this.config = {
+				...this.config,
+				...options
+			};
+		}
+	}
 
-  // source: http://stackoverflow.com/a/2686098/1074592
-  public simplify (num = 0) {
-    let numberVar = num
+	// source: http://stackoverflow.com/a/2686098/1074592
+	public simplify(num = 0) {
+		let result = num;
 
-    // 2 decimal places => 100, 3 => 1000, etc
-    let decPlaces = this.config.decimal
-    decPlaces = decPlaces != null ? decPlaces : 2
-    decPlaces = Math.pow(10, decPlaces)
+		// 2 decimal places => 100, 3 => 1000, etc
+		let decPlaces = this.config.decimal;
+		decPlaces = decPlaces != null ? decPlaces : 2;
+		decPlaces = Math.pow(10, decPlaces);
 
-    // Enumerate number abbreviations
-    const abbrev = this.config.abbrev
+		const { abbreviations } = this.config;
 
-    // Go through the array backwards, so we do the largest first
-    for (let i = abbrev.length - 1; i >= 0; i--) {
-      // Convert array index to "1000", "1000000", etc
-      const size = Math.pow(10, (i + 1) * 3)
+		// Go through the array backwards, so we do the largest first
+		for (let i = abbreviations.length - 1; i >= 0; i--) {
+			// Convert array index to "1000", "1000000", etc
+			const size = Math.pow(10, (i + 1) * 3);
 
-      // If the number is bigger or equal do the abbreviation
-      if (size <= numberVar) {
-        // Here, we multiply by decPlaces, round, and then divide by decPlaces.
-        // This gives us nice rounding to a particular decimal place.
-        numberVar = Math.round((numberVar * decPlaces) / size) / decPlaces
+			// If the number is bigger or equal do the abbreviation
+			if (size <= result) {
+				// Here, we multiply by decPlaces, round, and then divide by decPlaces.
+				// This gives us nice rounding to a particular decimal place.
+				result = Math.round((result * decPlaces) / size) / decPlaces;
 
-        // Handle special case where we round up to the next abbreviation
-        if (numberVar === 1000 && i < abbrev.length - 1) {
-          numberVar = 1
-          i++
-        }
+				// Handle special case where we round up to the next abbreviation
+				if (result === 1000 && i < abbreviations.length - 1) {
+					result = 1;
+					i++;
+				}
 
-        // Add the letter for the abbreviation
-        (numberVar as any) += abbrev[i]
+				// Add the letter for the abbreviation
+				(result as any) += abbreviations[i];
 
-        // We are done... stop
-        break
-      }
-    }
+				// We are done... stop
+				break;
+			}
+		}
 
-    return String(numberVar)
-  }
+		return String(result);
+	}
 }
 
-export function SimplifyNumber (num: number, config?: OptionInstances) {
-  const instance = new Instance(config)
+/**
+ * Simplifies a number by converting it to a string with an abbreviation.
+ * @param num The number to simplify
+ * @param config Options to format the number
+ */
+export function simplifyNumber(num: number, config?: OptionInstances) {
+	const instance = new Instance(config);
 
-  const simplifiedNumber = instance.simplify(num)
+	const simplifiedNumber = instance.simplify(num);
 
-  return simplifiedNumber
+	return simplifiedNumber;
 }
 
-export default SimplifyNumber
+export default simplifyNumber;
